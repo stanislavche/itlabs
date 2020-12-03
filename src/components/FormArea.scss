@@ -1,0 +1,36 @@
+.mainform {
+	display: block;
+	padding: 20px var(--spaces);
+	width: 280px;
+	background: var(--color-white);
+	position: relative;
+	border-radius: var(--border-radius);
+	box-shadow: 1px 3px 5px var(--color-elements);
+	&__input {
+		border: 1px solid var(--color-elements);
+		margin:0 0 18px;
+		padding: var(--spaces);
+		display: block;
+		width: 100%;
+		margin-bottom: var(--spaces);
+		border-radius: var(--border-radius);
+		&_submit {
+			margin: 30px 0 8px;
+			border: none;
+			padding: 10px;
+			line-height: 20px;
+			text-transform: uppercase;
+			font-size: var(--font-size-big);
+			display: block;
+			background-color: var(--color-lightblue);
+			color: var(--color-white);
+			size: var(--font-size-big);
+			transition: background-color 0.2s;
+			cursor: pointer;
+			font-weight: 700;
+			&:hover{
+				background-color: var(--color-darkblue);
+			}
+		}
+	}
+}
