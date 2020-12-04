@@ -17,6 +17,8 @@ class App extends Component {
 		super(props);
 		this.state = {
 			currentUser: emptyUser,
+			editableTable: null,
+			editableElement: null,
 			tableList: [{
 				isStatic: true,
 				userList: []
@@ -29,12 +31,21 @@ class App extends Component {
 		this.handleRemoveClick = this.handleRemoveClick.bind(this);
 		this.handleCopyTable = this.handleCopyTable.bind(this);
 		this.handleRemoveTable = this.handleRemoveTable.bind(this);
+		this.count = 0;
 	}
 
 	submitField(userData) {
-		const tableListCopy = [...this.state.tableList];
-		const mainTableCopy = [...tableListCopy[0].userList, userData];
-		tableListCopy[0].userList = mainTableCopy;
+		const tableListCopy = cloneDeep(this.state.tableList);
+		// EDIT
+		if (this.state.editableTable && this.state.editableElement) {
+			tableListCopy[this.state.editableTable - 1].userList[this.state.editableElement - 1] = userData;
+		} else {
+		// ADD
+			let mainTableCopy = null;
+			mainTableCopy = [...tableListCopy[0].userList, userData];
+			tableListCopy[0].userList = mainTableCopy;
+		}
+		
 		this.setState({ tableList: tableListCopy });
 		this.cancelEdit();
 	}
@@ -49,16 +60,40 @@ class App extends Component {
 		}
 	}
 
-	cancelEdit() {
-		this.setState({ currentUser: emptyUser });
+	cancelEdit(e) {
+		if(e) {
+			e.preventDefault();
+		}
+		this.setState({
+			currentUser: emptyUser,
+			editableTable: null,
+			editableElement: null
+		});
+		this.count++;
 	}
 
-	handleEditClick(element) {
-		this.setState({ currentUser: element });
+	handleEditClick(element, tIndex, eIndex) {
+		this.setState({
+			currentUser: element,
+			editableTable: tIndex,
+			editableElement: eIndex
+		});
+		this.count++;
 	}
 
-	handleRemoveClick(element) {
-		console.log(element);
+	handleRemoveClick(tIndex, eIndex) {
+		this.setState({
+			currentUser: emptyUser,
+			editableTable: tIndex,
+			editableElement: eIndex
+		});
+		if (tIndex && eIndex) {
+			const tableListCopy = cloneDeep(this.state.tableList)
+			tableListCopy[tIndex - 1].userList.splice(eIndex - 1, 1);
+			this.setState({ tableList: tableListCopy });
+			this.cancelEdit();
+		}	
+		return;
 	}
 
 	handleCopyTable(table) {
@@ -81,15 +116,21 @@ class App extends Component {
 		return (
 			<div className="App">
 				<section className="container">
-					<FormArea currentUser={this.state.currentUser} key={this.state.tableList[0].userList.length} cancel={this.cancelEdit} submit={this.validateForm} validator={this.validator}/>
+					<FormArea
+					currentUser={this.state.currentUser}
+					key={this.count}
+					cancel={this.cancelEdit}
+					submit={this.validateForm}
+					validator={this.validator}
+				/>
 				</section>
 				{this.state.tableList.map((item, key) =>
 					<Table
-						key={'table-' + key + '-' +item.userList.length}
+						key={'table-' + key + '-' + this.count}
 						tableIndex={key}
 						data={item}
 						editItemClick={ this.handleEditClick }
-						removeItemClick={ this.handleEditClick }
+						removeItemClick={ this.handleRemoveClick }
 						copyTable={this.handleCopyTable}
 						removeTable={this.handleRemoveTable}
 					/>

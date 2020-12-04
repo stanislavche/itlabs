@@ -7,8 +7,17 @@ class Table extends Component {
 		super(props);
 		this.state = {
 			userList: this.props.data ? this.props.data.userList : [],
-			isStatic: this.props.data ? this.props.data.isStatic : false,
+			isStatic: this.props.data ? this.props.data.isStatic : false
 		};
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if(JSON.stringify(this.props.data.userList) !== JSON.stringify(prevState.userList)) {
+			this.setState({
+				userList: this.props.data ? this.props.data.userList : [],
+				isStatic: this.props.data ? this.props.data.isStatic : false
+			});
+		}
 	}
 
 	render() {
@@ -51,8 +60,8 @@ class Table extends Component {
 									</td>
 									<td className="table__cell">
 										<div className="button-container">
-											<span className="custom-btn custom-btn_edit" onClick={() => {this.props.editItemClick(item)}}>Edit</span>
-											<span className="custom-btn custom-btn_rmv" onClick={() => {this.props.removeItemClick(item)}}>Delete</span>
+											<span className="custom-btn custom-btn_edit" onClick={() => {this.props.editItemClick(item, this.props.tableIndex + 1, key + 1)}}>Edit</span>
+											<span className="custom-btn custom-btn_rmv" onClick={() => {this.props.removeItemClick(this.props.tableIndex + 1, key + 1)}}>Delete</span>
 										</div>
 									</td>
 								</tr>
