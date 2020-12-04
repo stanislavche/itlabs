@@ -71,11 +71,18 @@ body {
 }
 
 .container {
-	margin-bottom: 45px;
+	margin-bottom: var(--padding-section);
 }
 
 .srv-validation-message {
 	color: var(--color-red);
 	font-size: 10px;
 	margin: -10px 0 10px;
+}
+
+
+@media (max-width: 560px) {
+	.container {
+		margin-bottom: var(--m-padding-section);
+	}
 }

@@ -2,7 +2,12 @@
   text-align: center;
   width: 100%;
   height: 100%;
-  padding: 45px;
+  padding: var(--padding-section);
   position: relative;
   display: block;
+  width: 100%;
+  max-width: calc(595px + var(--padding-section)*2);
+  @media (max-width: 560px) {
+  	padding: var(--m-padding-section);
+  }
 }
