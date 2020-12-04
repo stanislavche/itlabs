@@ -1,42 +1,50 @@
 import React, { Component } from 'react';
 import './FormArea.scss';
-//валидация, реактивная форма, typescript
+
 
 class FormArea extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			currentUser: {
-				name: this.props.currentUser ? this.props.currentUser.name : '',
-				surname: this.props.currentUser ? this.props.currentUser.surname : '',
-				age: this.props.currentUser ? this.props.currentUser.age : '',
-				city: this.props.currentUser ? this.props.currentUser.city : ''
-			}
+		this.state = this.props.currentUser;
+		this.validationRules = {
+			name: 'required|alpha_space',
+			surname: 'required|alpha_space',
+			age: 'required|numeric',
+			city: 'required|alpha_space'
 		};
-
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.validateField = this.validateField.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
 
-	handleSubmit(event) {
-		event.preventDefault();
-		console.log(this.state.currentUser);
-		return this.state.currentUser;
+
+	handleChange(event, key) {
+		this.setState({[key]: event.target.value})
 	}
 
-	validateField(event, key) {
-		console.log(event, key);
+	showCancelButton() {
+		if(this.props.currentUser.name.length) {
+			return (
+				<button type="cancel" className="mainform__input mainform__input_cancel btn btn_cancel" onClick={this.props.cancel}>CANCEL</button>
+			);
+		}
+		return;
 	}
 
 	render() {
-		if (this.state.currentUser) {
-			const inputList = Object.keys(this.state.currentUser).map((key) => {
-				return <input className="mainform__input" type="text" key={key} value={this.state.currentUser[key]} placeholder={key.charAt(0).toUpperCase() + key.slice(1)} onChange={(event) => this.validateField(event, key)}/>
+		if (this.state) {
+			const inputList = Object.keys(this.state).map((key) => {
+				return (
+					<div key={key}>
+						<input className="mainform__input" type="text" key={'input-' + key}  name={key} value={this.state[key]} placeholder={key.charAt(0).toUpperCase() + key.slice(1)} onChange={(event) => this.handleChange(event, key)}/>
+						{this.props.validator.message(key, this.state[key], this.validationRules[key])}
+					</div>
+				);
+
 			});
 			return (
-				<form className="mainform" onSubmit={this.handleSubmit}>
+				<form className="mainform" onSubmit={(event) => {this.props.submit(event, this.state)}}>
 					{inputList}
-					<input type="submit" className="mainform__input mainform__input_submit" value={this.props.currentUser ? 'EDIT' : 'ADD'} />
+					<button type="submit" className="mainform__input mainform__input_submit btn">{this.props.currentUser.name.length ? 'EDIT' : 'ADD'}</button>
+					{this.showCancelButton()}
 				</form>
 			);
 		} else {

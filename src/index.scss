@@ -13,3 +13,69 @@ body {
 	box-sizing: border-box;
 	font-family: 'Roboto', sans-serif;
 }
+
+.btn {
+	background-color: var(--color-lightblue);
+	color: var(--color-white);
+	size: var(--font-size-big);
+	transition: background-color var(--speed-animation);
+	cursor: pointer;
+	border: none !important;
+	padding: 5px var(--spaces);
+	border-radius: var(--border-radius);
+	outline: none;
+	&_cancel{
+		background-color: var(--color-elements);
+	}
+	&:hover{
+		background-color: var(--color-darkblue);
+	}
+}
+
+.rmv {
+	display: inline-block;
+	padding: 6px 10px;
+	margin-left: var(--spaces);
+	position: relative;
+	cursor: pointer;
+	vertical-align: bottom;
+	img {
+		display: block;
+		width: 12px;
+		height: 12px;
+	}
+}
+
+.button-container{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.custom-btn{
+	text-decoration: underline;
+	cursor: pointer;
+	display: inline-block;
+	transition: opacity var(--speed-animation);
+	&_edit {
+		color: var(--color-lightblue);
+	}
+
+	&_rmv{
+		color: var(--color-red);
+	}
+	&:hover{
+		opacity: 0.8;
+		text-decoration: none;
+	}
+}
+
+.container {
+	margin-bottom: 45px;
+}
+
+.srv-validation-message {
+	color: var(--color-red);
+	font-size: 10px;
+	margin: -10px 0 10px;
+}
